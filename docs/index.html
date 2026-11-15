@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emissões de gases de efeito estufa da cidade do Rio de Janeiro (2012–2024): composição setorial, volatilidade por escopo e fatores da redução líquida</title>
+<meta name="description" content="Análise reprodutível das emissões de GEE da cidade do Rio de Janeiro (2012–2024) a partir da Tabela 3696 do Data.Rio/IPP.">
+<meta name="author" content="Carlos Augusto Ferreira Souza, Wilson da Silva Prata Junior">
+<meta name="keywords" content="emissões de gases de efeito estufa, inventário GPC, Rio de Janeiro, análise exploratória de dados, FAIR">
+<link rel="license" href="https://creativecommons.org/licenses/by/4.0/">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.2/plotly.min.js" defer></script>
+<style>
+:root{--bg:#fff;--fg:#1d2327;--mut:#5b6670;--line:#dfe4e8;--acc:#0b5cab;--card:#f6f8fa;--code:#0f1720;--codefg:#e6edf3}
+@media (prefers-color-scheme:dark){:root{--bg:#12161a;--fg:#e6e9ec;--mut:#9aa6b0;--line:#2a3138;--acc:#6db3ff;--card:#1a2025}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,'Times New Roman',serif}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 80px}
+header{padding:48px 0 24px;border-bottom:1px solid var(--line)}
+header .kicker{font:600 13px/1 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
+h1{font-size:clamp(1.55rem,4.2vw,2.15rem);line-height:1.25;margin:14px 0 18px}
+.autores{font:16px/1.5 system-ui,sans-serif}.afil{font:14px/1.5 system-ui,sans-serif;color:var(--mut);margin-top:6px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;font:600 12.5px/1 system-ui,sans-serif}
+.badge{display:inline-block;padding:7px 10px;border-radius:6px;background:var(--card);border:1px solid var(--line);color:var(--fg);text-decoration:none}
+.badge.gh{background:#24292f;color:#fff;border-color:#24292f}
+h2{font-size:1.4rem;margin:44px 0 8px;padding-top:8px}h3{font-size:1.12rem;margin:28px 0 4px}
+p{margin:.7em 0}a{color:var(--acc)}
+.abstract{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 20px 14px;margin:28px 0}
+.abstract h2{margin-top:14px;font-size:1.1rem}.kw{font:14px/1.5 system-ui,sans-serif;color:var(--mut)}
+figure{margin:26px 0}figure img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
+figcaption{font:14px/1.5 system-ui,sans-serif;color:var(--mut);margin-top:8px}
+.plot{width:100%;min-height:380px}.ctrl{font:14px system-ui,sans-serif;margin:8px 0;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+select{font:inherit;padding:4px 6px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:4px}
+pre{background:var(--code);color:var(--codefg);padding:14px 16px;border-radius:8px;overflow-x:auto;font:13px/1.55 ui-monospace,Menlo,Consolas,monospace}
+code{font:.88em ui-monospace,Menlo,Consolas,monospace;background:var(--card);padding:1px 5px;border-radius:4px}pre code{background:none;padding:0}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font:14px/1.45 system-ui,sans-serif;margin:14px 0}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:var(--card)}
+.rq{border-left:4px solid var(--acc);padding:2px 14px;margin:12px 0;background:var(--card);border-radius:0 6px 6px 0}
+.note{font:14px/1.5 system-ui,sans-serif;color:var(--mut)}
+ol.refs{padding-left:1.3em;font-size:15.5px}ol.refs li{margin:.5em 0}
+footer{margin-top:50px;padding-top:16px;border-top:1px solid var(--line);font:13px/1.5 system-ui,sans-serif;color:var(--mut)}
+@media (max-width:560px){body{font-size:16px}h2{font-size:1.25rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="kicker">Projeto Final · Linguagem de Programação</div>
+  <h1>Emissões de gases de efeito estufa da cidade do Rio de Janeiro (2012–2024): composição setorial, volatilidade por escopo e fatores da redução líquida</h1>
+  <div class="autores"><b>Carlos Augusto Ferreira Souza, Wilson da Silva Prata Junior</b></div>
+  <div class="afil">Bacharelado em Sistemas de Informação — 6º período · Centro Universitário La Salle<br>
+  Prof. Alexandre Neves Louzada · Semestre 2026/2</div>
+  <div class="badges">
+    <a class="badge gh" href="https://github.com/carlosAugusto7/emissoes-gee-rio">⌥ Repositório no GitHub</a>
+    <span class="badge">Código: MIT</span><span class="badge">Dados e texto: CC BY 4.0</span>
+    <span class="badge">FAIR</span><span class="badge">Python · pandas · Plotly</span>
+    <a class="badge" href="https://www.data.rio/documents/d242a8866bb64769a00958e925f43350/about">Fonte: Data.Rio / IPP</a>
+  </div>
+</header>
+
+<section class="abstract" id="resumo">
+  <h2>Resumo</h2>
+  <p>As cidades precisam de inventários de gases de efeito estufa (GEE) para orientar metas de mitigação, mas séries publicadas em planilhas dificultam a análise reprodutível. Este trabalho constrói um pipeline determinístico em Python que converte a Tabela 3696 do Data.Rio/IPP, com as emissões da cidade do Rio de Janeiro entre 2012 e 2024 segundo a metodologia GPC, em um conjunto de dados longo, validado e aberto, e o explora por setor, escopo e gás. As emissões totais passaram de 22,27 Mt CO₂e em 2012 para 19,84 Mt em 2024 (-10,9%), com pico em 2014 e mínimo em 2020. Energia estacionária e transportes concentram cerca de 79% do total. O Escopo 2 (eletricidade) é o componente mais volátil (coeficiente de variação de 40%, contra 5% do Escopo 1) e se associa moderadamente à geração para o sistema elétrico nacional. A redução líquida decorre sobretudo da aviação, do transporte rodoviário e da siderurgia, parcialmente compensada pelo aterramento de resíduos; a participação do metano subiu de 9,3% para 11,9%. Discutem-se limitações da série e propostas de trabalhos futuros.</p>
+  <p class="kw"><b>Palavras-chave:</b> emissões de gases de efeito estufa; inventário GPC; cidade do Rio de Janeiro; análise exploratória; ciência aberta (FAIR).</p>
+</section>
+
+<h2 id="intro">1. Introdução</h2>
+<p>Cidades concentram grande parte das emissões antrópicas de gases de efeito estufa e, ao mesmo tempo, dispõem de instrumentos de política local (uso do solo, mobilidade, resíduos, edificações) para reduzi-las. O Global Protocol for Community-Scale Greenhouse Gas Emission Inventories (GPC) padronizou a contabilidade urbana de GEE em setores e em três escopos: emissões dentro do território (Escopo 1), emissões associadas à energia da rede consumida na cidade (Escopo 2) e emissões que ocorrem fora do território por atividades nele realizadas (Escopo 3) (WRI; C40; ICLEI, 2014).</p>
+<p>O Instituto Municipal de Urbanismo Pereira Passos (IPP) publica no portal Data.Rio a série anual de emissões do Rio de Janeiro. A série traz detalhes valiosos, mas vem em planilha com cabeçalhos em dois níveis, itens informativos que não somam no total e símbolos de dado ausente, o que dificulta a reutilização direta. Este trabalho trata a tabela como um problema de engenharia de dados e, a partir dela, busca responder:</p>
+<div class="rq"><b>RQ1.</b> Como evoluíram as emissões totais do Rio entre 2012 e 2024 e como mudou a composição setorial?</div>
+<div class="rq"><b>RQ2.</b> Que componentes, por escopo, explicam a volatilidade da série, em particular o Escopo 2 (energia elétrica)?</div>
+<div class="rq"><b>RQ3.</b> Que subsetores e gases explicam a variação líquida entre 2012 e 2024?</div>
+
+<h2 id="metodo">2. Metodologia e pipeline de dados</h2>
+<h3>2.1 Fonte e granularidade</h3>
+<p>Os dados são a Tabela 3696 do Data.Rio/IPP, “Emissões de gases de efeito estufa (GEE) da Cidade do Rio de Janeiro”, em toneladas de CO₂ equivalente (t CO₂e), de 2012 a 2024 (versão de setembro de 2026). A unidade de observação é <i>subsetor × ano × componente</i>. O arquivo (<code>3696.xls</code>) tem duas abas com o mesmo inventário: <code>3696_Escopos</code> (Escopo 1, 2, 3 e total) e <code>3696_GEE</code> (CO₂, CH₄, N₂O e total). As emissões já vêm convertidas em CO₂e com os potenciais de aquecimento global do quinto relatório do IPCC (IPCC, 2014). As estimativas de 2012–2021 foram revisadas em 2024, conforme as notas da fonte.</p>
+<h3>2.2 Tratamento</h3>
+<ul>
+  <li><b>Estrutura:</b> cada aba tem anos em um cabeçalho mesclado e componentes em outro. O ano é propagado com <code>ffill</code> e a tabela larga vira formato longo (4,056 linhas).</li>
+  <li><b>Hierarquia:</b> as linhas são classificadas em <code>setor</code> (5), <code>subsetor</code> (31), <code>total</code> e <code>memo</code>. Os itens <i>memo</i> (geração para o Sistema Interligado Nacional e compostagem) pertencem ao inventário territorial, mas, pela metodologia GPC, <b>não somam no total</b>; são mantidos à parte para não gerar dupla contagem.</li>
+  <li><b>Símbolos de ausência:</b> “-” (zero não resultante de arredondamento) e “(0)” viram 0; “...” (não aplicável) e “NE” (não estimado) viram <code>NaN</code>, sem imputação, porque nenhum método de preenchimento seria defensável para dados de inventário.</li>
+  <li><b>Normalização:</b> remoção de notas de rodapé nos rótulos e correção de grafias (“Ferrroviário”, “Ceu”).</li>
+  <li><b>Valores negativos mantidos:</b> reflorestamento e arborização urbana removem carbono e entram com sinal negativo.</li>
+  <li><b>Validação:</b> a soma dos cinco setores reproduz o TOTAL publicado (diferença máxima de 0,00 t) e as partes por escopo e por gás somam o total de cada linha. Os arquivos brutos nunca são alterados e o log de decisões fica em <code>data/processed/etl_log.txt</code>.</li>
+  <li><b>Métricas derivadas:</b> participação percentual, variação percentual, taxa de crescimento anual composta (CAGR) e coeficiente de variação (CV = desvio-padrão/média).</li>
+</ul>
+<p>Trechos centrais do pipeline (<code>src/etl.py</code>):</p>
+<pre><code>def parse_sheet(raw: pd.DataFrame, dimensao: str) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Converte a tabela larga (anos x componentes nas colunas) para formato longo.&quot;&quot;&quot;
+    anos = raw.iloc[3, 1:].ffill().astype(int).tolist()      # ano só aparece na 1ª coluna do bloco
+    comps = raw.iloc[4, 1:].astype(str).str.strip().tolist()  # Escopo 1/2/3/Total ou CO2/CH4/N2O/Total
+    ...
+    for i in range(6, idx_fim):
+        nome = _norm(rotulos[i])
+        if nome in SETORES:            nivel = &quot;setor&quot;
+        elif nome == &quot;TOTAL&quot;:          nivel = &quot;total&quot;
+        elif i &gt; idx_total:            nivel = &quot;memo&quot;      # itens que NÃO somam no total (GPC)
+        else:                          nivel = &quot;subsetor&quot;
+        ...</code></pre>
+<pre><code>def _to_num(v):
+    &quot;&quot;&quot;&#x27;-&#x27; = zero (nota 5); &#x27;(0)&#x27; = zero por arredondamento; &#x27;...&#x27; e &#x27;NE&#x27; = ausente (NaN).&quot;&quot;&quot;
+    if isinstance(v, (int, float, np.number)):
+        return float(v)
+    s = str(v).strip()
+    if s in {&quot;-&quot;, &quot;(0)&quot;, &quot;0&quot;}:
+        return 0.0
+    if s in {&quot;...&quot;, &quot;NE&quot;, &quot;&quot;, &quot;nan&quot;}:
+        return np.nan</code></pre>
+<pre><code>tot = df[(df.nivel == &quot;total&quot;) &amp; (df.componente == &quot;Total&quot;)].set_index([&quot;dimensao&quot;, &quot;ano&quot;])[&quot;valor_tco2e&quot;]
+soma = (df[(df.nivel == &quot;setor&quot;) &amp; (df.componente == &quot;Total&quot;)]
+        .groupby([&quot;dimensao&quot;, &quot;ano&quot;], observed=True)[&quot;valor_tco2e&quot;].sum())
+assert (tot - soma).abs().max() &lt; 1e-3   # os 5 setores reproduzem exatamente o TOTAL publicado</code></pre>
+
+<h2 id="resultados">3. Resultados e discussão</h2>
+<h3>3.1 RQ1 — Trajetória do total e composição setorial</h3>
+<p>As emissões totais caíram de 22,27 Mt CO₂e em 2012 para 19,84 Mt em 2024 (-10,9%; CAGR de -0,96% ao ano). A série subiu até o pico de 24,17 Mt em 2014, e o nível de 2024 está 17,9% abaixo desse pico. Entre 2019 e 2020 houve queda de 17,1% (mínimo de 17,36 Mt) e, em 2021, recuperação de 18,7%. Uma regressão linear simples indica tendência de -0,37 Mt por ano (R² = 0,61, p = 0,002); com apenas 13 observações autocorrelacionadas, vale como descrição da inclinação, não como inferência causal.</p>
+<figure>
+  <div id="g1" class="plot" role="img" aria-label="Barras empilhadas das emissões por setor de 2012 a 2024"></div>
+  <figcaption><b>Figura 1.</b> Emissões por setor (interativo: use os botões para alternar entre valores absolutos e participação; clique na legenda para ocultar setores). Fonte: Data.Rio/IPP, Tabela 3696; elaboração própria.</figcaption>
+</figure>
+<p>A composição mudou: energia estacionária subiu de 40,2% para 45,5% do total, enquanto transportes recuaram de 39,4% para 33,1%. Esse movimento não indica crescimento da energia estacionária, que variou apenas +0,7% no período. Ele resulta da queda de 25,1% em transportes, que reduziu o denominador. Resíduos cresceram 15,5% e processos industriais caíram 26,3%. O setor agropecuário, florestal e de uso do solo dobrou, mas parte de uma base mínima (cerca de 0,1% a 0,2% do total).</p>
+<div class="tw"><table>
+<thead><tr><th>Setor</th><th>2012</th><th>2019</th><th>2024</th><th>Var. 2012–24</th><th>CV 2012–24</th></tr></thead>
+<tbody>
+<tr><td>Energia Estacionária</td><td>40,2%</td><td>46,1%</td><td>45,5%</td><td>+0,7%</td><td>9,0%</td></tr>
+<tr><td>Transportes</td><td>39,4%</td><td>31,7%</td><td>33,1%</td><td>-25,1%</td><td>19,8%</td></tr>
+<tr><td>Resíduos</td><td>9,3%</td><td>11,9%</td><td>12,1%</td><td>+15,5%</td><td>6,6%</td></tr>
+<tr><td>Processos Industriais e Uso de Produtos</td><td>10,9%</td><td>10,1%</td><td>9,1%</td><td>-26,3%</td><td>9,7%</td></tr>
+<tr><td>Agropecuária, Floresta e Uso do Solo</td><td>0,1%</td><td>0,2%</td><td>0,2%</td><td>+103,1%</td><td>28,8%</td></tr>
+<tr><td><b>Total</b></td><td>100%</td><td>100%</td><td>100%</td><td><b>-10,9%</b></td><td>8,7%</td></tr>
+</tbody></table></div>
+<p class="note">Tabela 1. Participação no total, variação e coeficiente de variação por setor.</p>
+<figure>
+  <img src="assets/fig2_participacao.png" alt="Barras horizontais com a participação de cada setor em 2012, 2019 e 2024" loading="lazy">
+  <figcaption><b>Figura 2.</b> Composição setorial em 2012, 2019 e 2024.</figcaption>
+</figure>
+<p>Entre os dois maiores setores, transportes são o mais sensível a choques (CV de 19,8%, contra 9,0% da energia estacionária). A queda de 2020 é compatível com as restrições de mobilidade da pandemia de covid-19, e a recuperação posterior é parcial, o que as séries de aviação e transporte rodoviário (RQ3) detalham. Associar a queda à pandemia é uma interpretação de contexto; os dados do inventário não medem a causa.</p>
+
+<h3>3.2 RQ2 — Volatilidade por escopo</h3>
+<p>O Escopo 1 (emissões dentro do território) responde por entre 66% (2014) e 79% (2022) do total e é o componente mais estável (CV de 5,2%). O Escopo 3 oscila mais (CV de 17,4%) e cai de cerca de 21% do total em 2014 para 15% em 2021. O Escopo 2, ligado à eletricidade consumida, tem CV de 40,2%: atinge 2,96 Mt em 2014 (12,2% do total) e apenas 0,77 Mt em 2023.</p>
+<figure>
+  <div id="g2" class="plot" role="img" aria-label="Linhas das emissões por escopo de 2012 a 2024"></div>
+  <figcaption><b>Figura 3.</b> Emissões por escopo, 2012–2024 (interativo).</figcaption>
+</figure>
+<p>Como o Escopo 2 depende do fator de emissão da rede elétrica, e não só do consumo da cidade, grande parte da sua oscilação deve refletir a matriz do sistema nacional naquele ano. Um indício nos próprios dados é a associação entre o Escopo 2 e a geração de energia elétrica para o Sistema Interligado Nacional (SIN) reportada como item informativo, com r = 0,67 (Figura 4). A correlação é moderada, e a relação não é linear nem estável no tempo (por exemplo, 2021 destoa). Portanto, o resultado sugere, sem comprovar, que o Escopo 2 é um indicador ruim de esforço local de eficiência e que metas urbanas devem distinguir reduções sob controle da cidade (Escopo 1) das induzidas pela rede.</p>
+<figure>
+  <img src="assets/fig3_escopos.png" alt="Barras empilhadas por escopo e dispersão entre Escopo 2 e geração para o SIN" loading="lazy">
+  <figcaption><b>Figura 4.</b> À esquerda, emissões por escopo; à direita, Escopo 2 contra a geração para o SIN no território (cada ponto é um ano).</figcaption>
+</figure>
+
+<h3>3.3 RQ3 — Subsetores e gases por trás da redução líquida</h3>
+<p>A redução líquida de 2,43 Mt entre 2012 e 2024 é a soma de movimentos de sinais opostos. Os três maiores contribuintes de queda são aviação (−1,21 Mt; −37,9%), transporte rodoviário (−0,92 Mt; −17,1%) e produção de ferro e aço (−0,66 Mt; −28,8%), que juntos somam 2,80 Mt, ou seja, mais que toda a redução líquida. O aterramento de resíduos (+0,38 Mt; +24,0%), as indústrias de energia (+0,19 Mt) e as indústrias de manufatura e construção (+0,16 Mt) compensam parte da queda. Na aviação, a queda já está presente antes da pandemia (de 3,20 Mt em 2012 para 2,29 Mt em 2019), logo não se explica apenas por 2020.</p>
+<figure>
+  <div class="ctrl"><label>De <select id="y0"></select></label><label>até <select id="y1"></select></label><span>Os 8 maiores recuos e aumentos entre os anos escolhidos</span></div>
+  <div id="g3" class="plot" role="img" aria-label="Barras horizontais com a variação absoluta por subsetor entre dois anos escolhidos"></div>
+  <figcaption><b>Figura 5.</b> Explorador de variações por subsetor (interativo; padrão 2012→2024). Verde indica redução e laranja, aumento.</figcaption>
+</figure>
+<p>Quanto aos gases, o CO₂ permanece dominante, mas perde participação: de 89,0% (2012) para 86,2% (2024), com queda absoluta de 13,7%. O metano cresce 14,2% e sua participação sobe de 9,3% para 11,9%, em linha com o aumento do aterramento de resíduos, fonte típica de CH₄. O N₂O fica praticamente estável em termos absolutos (+0,2%) e responde por menos de 2% do total. Assim, a descarbonização observada é essencialmente de CO₂ (combustíveis), e a agenda de resíduos e metano ganha peso relativo.</p>
+<figure>
+  <img src="assets/fig4_gases.png" alt="Emissões por gás e participação de CH4 e N2O ao longo do tempo" loading="lazy">
+  <figcaption><b>Figura 6.</b> Emissões por gás (esquerda) e participação de CH₄ e N₂O (direita).</figcaption>
+</figure>
+
+<h2 id="conclusao">4. Conclusão</h2>
+<p><b>RQ1.</b> As emissões do Rio caíram 10,9% entre 2012 e 2024, com pico em 2014 e mínimo em 2020; energia estacionária e transportes concentram cerca de 79% do total. <b>RQ2.</b> O Escopo 2 é o mais volátil e se associa à geração do sistema elétrico nacional, o que o torna um indicador frágil do esforço local. <b>RQ3.</b> A redução líquida vem de aviação, transporte rodoviário e siderurgia, e o metano ganha participação por causa dos resíduos.</p>
+<p><b>Limitações.</b> (i) São 13 pontos anuais, o que limita testes estatísticos; (ii) a série foi revisada em 2024 e pode ser revisada de novo; (iii) o inventário não traz causas, de modo que explicações como a pandemia ou a matriz elétrica são hipóteses de contexto; (iv) valores “NE” e “...” não foram imputados; (v) a análise é agregada para a cidade e não diferencia bairros ou fontes individuais.</p>
+<p><b>Trabalhos futuros.</b> Cruzar a série com população, PIB municipal e fator de emissão da rede para calcular intensidades per capita e por unidade de PIB; decompor a variação do Escopo 2 em efeito consumo e efeito fator de emissão; e comparar o Rio com outras cidades signatárias do GPC.</p>
+
+<h2 id="fair">5. Disponibilidade dos dados e declaração FAIR</h2>
+<ul>
+  <li><b>Findable:</b> repositório com <code>README.md</code>, palavras-chave, autoria, disciplina e semestre; dados brutos referenciados pelo <a href="https://www.data.rio/documents/d242a8866bb64769a00958e925f43350/about">link da fonte</a>.</li>
+  <li><b>Accessible:</b> repositório público no GitHub; scripts rodam sem credenciais; artigo servido pelo GitHub Pages, com layout responsivo.</li>
+  <li><b>Interoperable:</b> dados processados em <code>.csv.gz</code> (formato aberto) e <code>data/data_dictionary.md</code> descrevendo cada variável.</li>
+  <li><b>Reusable:</b> licença MIT (código) e CC BY 4.0 (dados e texto); <code>requirements.txt</code> com versões fixas.</li>
+</ul>
+<p>Para reproduzir todo o pipeline:</p>
+<pre><code>git clone https://github.com/carlosAugusto7/emissoes-gee-rio.git
+cd emissoes-gee-rio
+python -m venv .venv &amp;&amp; source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python -m src.etl          # data/raw/3696.xls -&gt; data/processed/*.csv.gz
+python -m src.analysis     # figuras e métricas em docs/assets/
+python -m src.build_site   # regenera docs/index.html</code></pre>
+
+<h2 id="refs">6. Referências</h2>
+<ol class="refs">
+<li>HUNTER, J. D. Matplotlib: a 2D graphics environment. <i>Computing in Science &amp; Engineering</i>, v. 9, n. 3, p. 90–95, 2007.</li>
+<li>INTERGOVERNMENTAL PANEL ON CLIMATE CHANGE (IPCC). <i>Climate Change 2014: Synthesis Report</i>. Genebra: IPCC, 2014.</li>
+<li>McKINNEY, W. Data structures for statistical computing in Python. In: PYTHON IN SCIENCE CONFERENCE, 9., 2010. <i>Proceedings…</i>, p. 56–61, 2010.</li>
+<li>PLOTLY TECHNOLOGIES INC. <i>Collaborative data science</i>. Montreal: Plotly Technologies Inc., 2015. Disponível em: https://plot.ly.</li>
+<li>RIO DE JANEIRO (Município). Instituto Municipal de Urbanismo Pereira Passos (IPP). <i>Emissões de gases de efeito estufa (GEE) da Cidade do Rio de Janeiro, em t CO₂e — 2012 a 2024</i> (Tabela 3696). Data.Rio, set. 2026. Disponível em: <a href="https://www.data.rio/documents/d242a8866bb64769a00958e925f43350/about">https://www.data.rio/documents/d242a8866bb64769a00958e925f43350/about</a>. Acesso em: 13 nov. 2026.</li>
+<li>WILKINSON, M. D. et al. The FAIR Guiding Principles for scientific data management and stewardship. <i>Scientific Data</i>, v. 3, art. 160018, 2016.</li>
+<li>WORLD RESOURCES INSTITUTE (WRI); C40 CITIES CLIMATE LEADERSHIP GROUP; ICLEI. <i>Global Protocol for Community-Scale Greenhouse Gas Emission Inventories (GPC)</i>: an accounting and reporting standard for cities. Washington, DC: WRI, 2014.</li>
+</ol>
+
+<footer>
+  Linguagem de Programação · Centro Universitário La Salle · 2026/2.<br>
+  Texto e dados processados sob licença <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>; código sob licença MIT. Dados originais: Data.Rio/IPP.
+</footer>
+</div>
+<script>
+
+window.addEventListener('load', function(){
+const D = {"anos": [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024], "setores": [{"nome": "Energia Estacionária", "cor": "#0072B2", "valores": [8963103.936147649, 9822352.654515034, 10955000.59393023, 10498066.692294, 9225252.133616736, 9470687.74925201, 9216566.313831627, 9661996.675419534, 8154741.782001758, 10989563.129789239, 8943586.204653662, 8775835.122095738, 9029786.052767701]}, {"nome": "Transportes", "cor": "#E69F00", "valores": [8770524.55478441, 8486188.991063464, 8273596.977907164, 8095132.55130835, 7740434.424566838, 7377741.208094184, 6901052.381435184, 6640376.75373158, 4442492.410588315, 4706948.858483493, 5877355.335627386, 6306621.744432408, 6567985.04292847]}, {"nome": "Resíduos", "cor": "#009E73", "valores": [2078837.6629516059, 2353469.9621063913, 2656592.7767756283, 2570357.8305281675, 2514738.029235885, 2440046.449462817, 2426267.2500475254, 2483070.8133705817, 2501919.5081993407, 2424059.2677222355, 2161084.082876228, 2269761.1194876255, 2401402.2484245715]}, {"nome": "Processos Industriais e Uso de Produtos", "cor": "#CC79A7", "valores": [2436595.1625750414, 2128513.1225449746, 2264395.9516493306, 2171810.4418308507, 2585472.4607820325, 2631858.4748716056, 2450042.9087976795, 2117871.3287850576, 2218329.326727059, 2435024.1631554486, 2279263.694414069, 2406378.652598531, 1796686.5752738942]}, {"nome": "Agropecuária, Floresta e Uso do Solo", "cor": "#999999", "valores": [22940.088107794643, 16916.97335744733, 17455.35241859901, 32531.883403427622, 38042.08126968288, 42966.29934385746, 38025.19428503426, 42871.70477569745, 41783.90120294132, 41978.87179009592, 43719.266324819975, 44184.235829726196, 46591.58481894648]}], "escopos": [{"nome": "Escopo 1", "cor": "#0072B2", "valores": [16293895.027826957, 15966653.946459837, 16048781.36870687, 15732349.234540714, 15613246.24201482, 15426262.514292294, 15062133.722662775, 15021904.053862741, 13144636.241971148, 15031542.398411792, 15230253.90942542, 15396959.129019938, 14675512.516678834]}, {"nome": "Escopo 2", "cor": "#D55E00", "valores": [1355509.5262562274, 2011612.694107241, 2960105.067670508, 2635149.676095326, 1693570.4838755042, 1901800.695826528, 1508203.1173001146, 1589877.9815458173, 1174610.6784003181, 2446914.920504281, 818084.4249086966, 766188.1730086524, 1148052.4272320226]}, {"nome": "Escopo 3", "cor": "#56B4E9", "valores": [4622596.850483319, 4829175.06302023, 5158155.216303571, 5000400.488728757, 4797122.403580849, 4635236.970905651, 4461617.208434164, 4334405.240673894, 3040020.008347949, 3119116.972024437, 3256670.249562051, 3639633.5724154385, 4018886.560302723]}], "subsetores": [{"nome": "Agropecuário", "valores": [247.12055003820916, 783.0570574921969, 2645.384415156595, 2484.2034927204113, 1433.0252892182068, 1599.5121822265237, 1146.4046182786005, 434.1691292290578, 223.2038180736979, 279.25850173754145, 67.0673619660268, 192.97829304816852, 299.4970264575034]}, {"nome": "Aplicação de ureia", "valores": [22.359333333333336, 22.528000000000002, 22.55, 22.55, 22.038866666666667, 22.242733333333334, 22.18773333333333, 22.812533333333334, 22.448800000000002, 21.156666666666666, 20.163, 17.509066666666666, 16.28366666666667]}, {"nome": "Aquaviário", "valores": [161036.07913640933, 129849.35056680019, 87248.25360416825, 86530.1327648149, 61779.07933955991, 48161.047048154425, 36039.28775613701, 30613.227870791816, 33764.92997534738, 31740.56183465998, 35341.89302427606, 45594.44160669636, 97393.96886936059]}, {"nome": "Arborização urbana", "valores": [-2707.4329333333335, -3731.784466666666, -4480.203933333333, -5213.513433333333, -5674.376399999999, -6211.274299999999, -6401.074166666666, -6575.1532, -6689.636799999999, -6769.7321999999995, -6917.867366666666, -7097.138766666666, -7250.735799999999]}, {"nome": "Aterramento", "valores": [1596977.368221564, 1824155.294446622, 2107393.6715291617, 2090192.9153601858, 2051515.9527841527, 1993919.238090746, 1882428.0562836328, 2018253.4137724082, 2104746.680355808, 2037238.1579283802, 1832666.4717949564, 1891094.0862875301, 1980947.7615494684]}, {"nome": "Aéreo", "valores": [3199341.365993336, 3119573.607620894, 3045140.159528521, 2933672.945315956, 2839557.6603215327, 2670365.3608358353, 2595430.7289165873, 2286871.450746371, 931670.1600389149, 905852.75154867, 1434683.7094321828, 1751025.4215814043, 1986349.4651293037]}, {"nome": "Calagem", "valores": [1786.2327999999995, 1930.6540000000002, 1922.7867999999999, 1917.6696000000004, 1874.7119599999996, 1923.8207999999995, 1801.89416, 1955.2407600000004, 1868.30556, 1837.2024000000001, 1681.9660000000001, 1519.3001999999997, 1477.3985599999996]}, {"nome": "Comercial", "valores": [725236.0500633259, 962782.0554878323, 1294480.342293191, 1231122.342610569, 868920.2442978979, 913576.2087251665, 735874.7851874748, 770699.2949886129, 453661.4119335219, 987451.6343897197, 460314.47043477563, 451065.5760400441, 571017.7763252715]}, {"nome": "Compostagem", "valores": [617.6828507317073, 317.75894026266417, 494.3561044652908, 2066.654783639775, 783.4858532833023, 281.7114322345141, 1101.4206650319993, 4345.683400928001, 2778.870608452001, 2595.2654988680015, 4162.947248779999, 5085.865416516002, 5894.584125656002]}, {"nome": "Emissões diretas de N2O do manejo de solos", "valores": [5857.546035058771, 5252.577907150837, 5738.113010027482, 5799.201288716313, 5618.995734562209, 5592.793081399401, 5359.956650658254, 5654.315330999983, 5383.976158897887, 5246.25160083318, 5665.727705943254, 5515.518286381639, 5455.357022935523]}, {"nome": "Emissões fugitivas do setor de óleo e gás", "valores": [105868.21479281303, 68811.8374020106, 68266.31364034688, 63342.8901907224, 59842.31819767799, 57147.34515210501, 63949.38162603881, 101146.42554415455, 102130.02522790516, 95332.87372577145, 95417.57947535327, 78211.56221533133, 94550.62464549756]}, {"nome": "Emissões indiretas de N2O do manejo de dejetos", "valores": [134.32312670857144, 104.07402845714286, 67.02696497828572, 72.14353821714286, 498.16972882285717, 393.0385314742857, 37.84967658057143, 173.29354250057145, 169.47650091428568, 173.40537456, 50.82415435428572, 46.157742400000004, 174.5136209142857]}, {"nome": "Emissões indiretas de N2O do manejo de solos", "valores": [1562.1389953139378, 1387.0771263289382, 1603.1063086343981, 1622.360043297599, 1578.733713866961, 1577.535544659417, 1497.3486892928975, 1607.9988363799969, 1504.3002732345763, 1452.553298375732, 1604.3592188326409, 1560.0047731384207, 1545.345426813045]}, {"nome": "Esgotos e efluentes", "valores": [478859.98136164475, 525725.601780578, 546334.6532317235, 475926.7216633129, 460285.0259079701, 442715.1467303795, 537496.06104848, 455190.0659507948, 391692.75256797223, 381418.83467562427, 321929.5775152866, 371748.73512847396, 411927.8756490304]}, {"nome": "Fermentação entérica", "valores": [12726.0728, 9092.972000000002, 10825.612000000001, 11424.924, 11195.155999999999, 9766.344000000003, 9068.948, 9746.884000000002, 8236.312, 7838.767999999999, 10124.044000000002, 10329.228000000001, 10623.116]}, {"nome": "Ferroviário", "valores": [24763.795030074165, 38534.44501582265, 57259.78621181185, 53137.896957404, 38333.18880446589, 41668.90289089066, 34150.60676902368, 35721.2595659517, 23228.084546177895, 42933.723049258246, 14462.787015294154, 12894.525637872612, 18987.772489245566]}, {"nome": "Iluminação Pública", "valores": [33381.59750934058, 48826.33319786646, 69245.5322909795, 62935.01422504734, 41520.36361364658, 46499.60779722297, 38247.418958042064, 40844.985095281285, 33002.51214156914, 58235.452374683446, 14880.886646207706, 10380.815590405988, 16768.551438779166]}, {"nome": "Incineração e Queima à Céu Aberto", "valores": [2382.6305176652004, 3271.306938928631, 2370.0959102774755, 2171.5387210289423, 2153.5646904790756, 3130.353209456942, 5241.712050380736, 5281.650246450599, 2701.2046671084313, 2807.009619363057, 2325.08631720472, 1832.4326551052363, 2632.027100416681]}, {"nome": "Indústrias de energia", "valores": [32844.245589606806, 19267.695496498727, 22922.37241028227, 21452.868827008228, 17664.99715304452, 21663.27645893134, 26916.586835649097, 21632.972920133554, 11884.661583999108, 15199.664689709653, 13279.234147606194, 6491.612795415882, 225874.2958308086]}, {"nome": "Indústrias de manufatura e construção", "valores": [6607351.335300773, 6896960.2862324165, 7073625.50428721, 6912838.109109544, 6575579.303764349, 6631221.236847365, 6790705.728788504, 7133170.478120282, 6369680.970317263, 7633145.897861627, 7239434.207243479, 7148646.15444316, 6767875.35502945]}, {"nome": "Institucional", "valores": [145112.11280101974, 207455.62120101653, 289920.88076208206, 254087.20250169904, 162327.17207212126, 188894.52141482086, 141990.2932301609, 145892.72768538646, 121366.64135837356, 241258.43026335267, 97475.6332389713, 91265.95637732369, 130719.33006761358]}, {"nome": "Manejo de dejetos", "valores": [1313.3514602057146, 1083.1530699428572, 993.3149210605716, 1055.1444391085713, 6052.065192982857, 4777.175311451429, 543.0885668617141, 2155.465939821714, 2079.734783314286, 2122.463720137143, 797.4047014628571, 797.3590954857142, 2267.435943314286]}, {"nome": "Mudança de uso do solo", "valores": [21913.19130952505, 21913.19130952505, 21913.19130952505, 34994.54025319361, 34994.54025319361, 41015.772688594996, 41015.772688594996, 41015.772688594996, 41015.772688594996, 41015.772688594996, 41015.772688594996, 41015.772688594996, 41015.772688594996]}, {"nome": "Perdas comerciais de energia elétrica + outros não categorizados", "valores": [271345.1948507244, 380572.8511117069, 582080.4840890765, 502873.7487321751, 326188.9918330661, 351333.11515919736, 312001.983639022, 365720.5036477124, 268661.3816122146, 584400.3485615943, 197519.68062928246, 210884.9320106942, 339943.1169329435]}, {"nome": "Produção de ferro e aço", "valores": [2302579.2072912375, 1996160.666171533, 2124735.6610210184, 2032329.5903087885, 2425809.532318965, 2482656.607794166, 2331243.991557925, 1977275.8032449873, 2097967.960838446, 2308040.388081936, 2142196.287104299, 2266411.336805596, 1639966.3790656219]}, {"nome": "Produção de vidro", "valores": [54524.0471530488, 47645.9718380073, 59526.02381591499, 55759.639598782946, 64179.454259211125, 63228.48868560697, 30532.225383658802, 47966.234829352754, 36875.124020787305, 45883.503612335204, 52351.79373022466, 51815.71678937985, 44526.61203424491]}, {"nome": "Reflorestamento", "valores": [-19667.6948190174, -20137.469617290833, -21150.144962293445, -19163.136325772288, -18117.95378041228, -15891.149047055405, -14920.77771362084, -12884.925655933144, -11806.788762014712, -10958.96975907181, -10323.127777701391, -9519.475256274565, -8732.902310292333]}, {"nome": "Residencial", "valores": [1041718.0646900074, 1236892.9173281929, 1551813.7797419042, 1446930.3126045153, 1171775.717395714, 1258752.9255149737, 1105733.730948458, 1082455.1182887433, 794130.9740088377, 1374259.5694210415, 825197.44547602, 778695.5343303151, 882737.5054708786]}, {"nome": "Rodoviário", "valores": [5385383.314624591, 5198231.587859947, 5083948.778562663, 5021791.576270174, 4800764.496101279, 4617545.897319304, 4235431.757993436, 4287170.815548466, 3453829.2360278745, 3726421.822050905, 4392866.946155634, 4497107.355606435, 4465253.83644056]}, {"nome": "Uso de lubrificantes e parafinas", "valores": [23017.669797422128, 23461.170105804442, 23793.36371980469, 25528.564404761135, 27751.98875941209, 23773.098577017776, 17240.676356095377, 19101.7812107174, 14562.895367826053, 15513.24846117689, 11134.521079545926, 12085.866503555504, 12704.424824027308]}, {"nome": "Uso de óxido nitroso", "valores": [56474.23833333333, 61245.31442962963, 56340.90309259259, 58192.64751851852, 67731.48544444445, 62200.279814814814, 71026.0155, 73527.50949999999, 68923.3465, 65587.023, 73581.0925, 76065.7325, 99489.15935]}]};
+const cs = getComputedStyle(document.documentElement);
+const FG = cs.getPropertyValue('--fg').trim() || '#1d2327';
+const GRID = cs.getPropertyValue('--line').trim() || '#dfe4e8';
+const base = (extra) => Object.assign({paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',
+  font:{family:'system-ui,sans-serif',color:FG,size:13},margin:{l:62,r:14,t:30,b:50},
+  xaxis:{gridcolor:GRID,dtick:1},yaxis:{gridcolor:GRID},legend:{orientation:'h',y:-0.22}}, extra||{});
+const cfg = {responsive:true,displaylogo:false};
+const fmt = (v)=> (v/1e6).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+/* Gráfico 1: setores empilhados (valor absoluto / participação) */
+(function(){
+  const traces = D.setores.map(s => ({type:'bar',name:s.nome,x:D.anos,y:s.valores.map(v=>v/1e6),marker:{color:s.cor},
+    hovertemplate:'%{x}: %{y:.2f} Mt CO₂e<extra>'+s.nome+'</extra>'}));
+  const lay = base({barmode:'stack',yaxis:{title:'Milhões de t CO₂e',gridcolor:GRID},
+    updatemenus:[{type:'buttons',direction:'right',x:0,y:1.16,buttons:[
+      {label:'Valores absolutos',method:'relayout',args:[{barnorm:'',  'yaxis.title':'Milhões de t CO₂e'}]},
+      {label:'Participação (%)', method:'relayout',args:[{barnorm:'percent','yaxis.title':'% do total'}]}]}]});
+  Plotly.newPlot('g1',traces,lay,cfg);
+})();
+
+/* Gráfico 2: escopos (linhas) */
+(function(){
+  const traces = D.escopos.map(s => ({type:'scatter',mode:'lines+markers',name:s.nome,x:D.anos,y:s.valores.map(v=>v/1e6),
+    line:{color:s.cor,width:2.5},hovertemplate:'%{x}: %{y:.2f} Mt<extra>'+s.nome+'</extra>'}));
+  Plotly.newPlot('g2',traces,base({yaxis:{title:'Milhões de t CO₂e',gridcolor:GRID,rangemode:'tozero'}}),cfg);
+})();
+
+/* Gráfico 3: explorador de variações por subsetor */
+(function(){
+  const a = document.getElementById('y0'), b = document.getElementById('y1');
+  D.anos.forEach(y=>{a.add(new Option(y,y));b.add(new Option(y,y));});
+  a.value = 2012; b.value = 2024;
+  function draw(){
+    const y0 = +a.value, y1 = +b.value, i0 = D.anos.indexOf(y0), i1 = D.anos.indexOf(y1);
+    const rows = D.subsetores.map(s=>({n:s.nome,d:(s.valores[i1]-s.valores[i0])/1e6})).filter(r=>!isNaN(r.d));
+    rows.sort((p,q)=>p.d-q.d);
+    const sel = rows.slice(0,8).concat(rows.slice(-8)).filter((r,i,arr)=>arr.findIndex(x=>x.n===r.n)===i);
+    const tr = [{type:'bar',orientation:'h',x:sel.map(r=>r.d),y:sel.map(r=>r.n),
+      marker:{color:sel.map(r=>r.d<0?'#009E73':'#D55E00')},
+      hovertemplate:'%{y}<br>%{x:+.3f} Mt CO₂e<extra></extra>'}];
+    Plotly.react('g3',tr,base({margin:{l:250,r:14,t:20,b:50},xaxis:{title:'Variação '+y0+'→'+y1+' (milhões de t CO₂e)',gridcolor:GRID,zeroline:true},
+      yaxis:{automargin:true,tickfont:{size:11}},height:520}),cfg);
+  }
+  a.onchange = b.onchange = draw; draw();
+})();
+});
+
+</script>
+<noscript><p class="note" style="text-align:center">Os gráficos interativos exigem JavaScript. As Figuras 2, 4 e 6 estão disponíveis como imagens.</p></noscript>
+<!-- resumo: 175 palavras -->
+</body>
+</html>

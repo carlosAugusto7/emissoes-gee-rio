@@ -1,0 +1,8 @@
+[3696_Escopos] aba lida com formato (55, 53) (linhas x colunas)
+[3696_GEE] aba lida com formato (54, 53) (linhas x colunas)
+Valores ausentes ('...' e 'NE') mantidos como NaN, sem imputação: 562
+Células '-' ou '(0)' convertidas para 0.0: 618
+Grafias corrigidas: 'Ferrroviário'->'Ferroviário'; 'Ceu'->'Céu'
+Soma dos 5 setores vs TOTAL: diferença máxima = 0.0000 tCO2e
+escopo: máx |soma das partes - Total| por setor/ano = 0.0000 tCO2e
+gas: máx |soma das partes - Total| por setor/ano = 0.0000 tCO2e

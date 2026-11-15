@@ -1,0 +1,167 @@
+{
+  "total": {
+    "2012": 22272001.4045665,
+    "2013": 22807441.70358731,
+    "2014": 24167041.652680952,
+    "2015": 23367899.399364796,
+    "2016": 22103939.12947117,
+    "2017": 21963300.181024473,
+    "2018": 21031954.04839705,
+    "2019": 20946187.276082452,
+    "2020": 17359266.928719416,
+    "2021": 20597574.290940512,
+    "2022": 19305008.583896164,
+    "2023": 19802780.874444026,
+    "2024": 19842451.504213586
+  },
+  "total_2012": 22272001.4045665,
+  "total_2024": 19842451.504213586,
+  "var_2012_2024_pct": -10.908538735341388,
+  "pico_ano": 2014,
+  "pico_valor": 24167041.652680952,
+  "min_ano": 2020,
+  "min_valor": 17359266.928719416,
+  "var_2014_2024_pct": -17.894578122629333,
+  "var_2019_2020_pct": -17.124454680393242,
+  "var_2020_2021_pct": 18.65463199291897,
+  "cagr_total_pct": -0.9579380041194407,
+  "tendencia_t_por_ano": -372891.0354653375,
+  "tendencia_r2": 0.6138110593911792,
+  "tendencia_p": 0.0015331239329417707,
+  "participacao_pct": {
+    "2012": {
+      "Energia Estacionária": 40.24381901444167,
+      "Transportes": 39.379148714431025,
+      "Resíduos": 9.333861044591057,
+      "Processos Industriais e Uso de Produtos": 10.94017155582371,
+      "Agropecuária, Floresta e Uso do Solo": 0.1029996707125349
+    },
+    "2019": {
+      "Energia Estacionária": 46.12771072877855,
+      "Transportes": 31.702078598876753,
+      "Resíduos": 11.85452407467918,
+      "Processos Industriais e Uso de Produtos": 10.111011139499185,
+      "Agropecuária, Floresta e Uso do Solo": 0.2046754581663213
+    },
+    "2024": {
+      "Energia Estacionária": 45.5074114750902,
+      "Transportes": 33.10067327887254,
+      "Resíduos": 12.102346566978524,
+      "Processos Industriais e Uso de Produtos": 9.054761075728793,
+      "Agropecuária, Floresta e Uso do Solo": 0.23480760332992454
+    }
+  },
+  "var_setor_2012_2024_pct": {
+    "Energia Estacionária": 0.7439623270586893,
+    "Transportes": -25.112973552470496,
+    "Resíduos": 15.516583676619433,
+    "Processos Industriais e Uso de Produtos": -26.262409001291754,
+    "Agropecuária, Floresta e Uso do Solo": 103.10115898428252
+  },
+  "cv_setor_pct": {
+    "Energia Estacionária": 8.983080934719718,
+    "Transportes": 19.812705409716013,
+    "Resíduos": 6.647437886494717,
+    "Processos Industriais e Uso de Produtos": 9.739136423547858,
+    "Agropecuária, Floresta e Uso do Solo": 28.81418644287469
+  },
+  "cv_total_pct": 8.744320042308464,
+  "escopo_participacao_pct": {
+    "2012": {
+      "Escopo 1": 73.15864763050062,
+      "Escopo 2": 6.0861594862251716,
+      "Escopo 3": 20.755192883274212
+    },
+    "2014": {
+      "Escopo 1": 66.40772006501057,
+      "Escopo 2": 12.24852056868173,
+      "Escopo 3": 21.343759366307687
+    },
+    "2021": {
+      "Escopo 1": 72.97724569937905,
+      "Escopo 2": 11.879626629532362,
+      "Escopo 3": 15.143127671088566
+    },
+    "2022": {
+      "Escopo 1": 78.8927590642471,
+      "Escopo 2": 4.237679674440163,
+      "Escopo 3": 16.869561261312764
+    },
+    "2024": {
+      "Escopo 1": 73.9601783255585,
+      "Escopo 2": 5.785839652868655,
+      "Escopo 3": 20.25398202157281
+    }
+  },
+  "cv_escopo_pct": {
+    "Escopo 1": 5.189175750196834,
+    "Escopo 2": 40.188523609941115,
+    "Escopo 3": 17.435036356431645
+  },
+  "escopo2_max": [
+    2014,
+    2960105.067670508
+  ],
+  "escopo2_min": [
+    2023,
+    766188.1730086524
+  ],
+  "corr_escopo2_sin": 0.670137042824957,
+  "gas_participacao_pct": {
+    "2012": {
+      "CO2": 89.01063044594734,
+      "CH4": 9.31757160294339,
+      "N2O": 1.6717979511092662
+    },
+    "2018": {
+      "CO2": 86.93124667577491,
+      "CH4": 11.360056273516276,
+      "N2O": 1.7086970507087726
+    },
+    "2024": {
+      "CO2": 86.174746462295,
+      "CH4": 11.945701091310392,
+      "N2O": 1.8795524463945934
+    }
+  },
+  "var_gas_2012_2024_pct": {
+    "CO2": -13.74699799368868,
+    "CH4": 14.220744568195599,
+    "N2O": 0.16286589043308375
+  },
+  "delta_subsetor_2012_2024": {
+    "Aéreo": -1212991.900864032,
+    "Rodoviário": -920129.4781840304,
+    "Produção de ferro e aço": -662612.8282256157,
+    "Residencial": -158980.5592191288,
+    "Comercial": -154218.27373805444,
+    "Esgotos e efluentes": -66932.10571261437,
+    "Aquaviário": -63642.110267048745,
+    "Iluminação Pública": -16613.046070561413,
+    "Institucional": -14392.782733406159,
+    "Emissões fugitivas do setor de óleo e gás": -11317.590147315466,
+    "Uso de lubrificantes e parafinas": -10313.24497339482,
+    "Produção de vidro": -9997.435118803893,
+    "Ferroviário": -5776.022540828599,
+    "Arborização urbana": -4543.302866666665,
+    "Fermentação entérica": -2102.9568,
+    "Emissões diretas de N2O do manejo de solos": -402.1890121232482,
+    "Calagem": -308.8342399999999,
+    "Emissões indiretas de N2O do manejo de solos": -16.79356850089289,
+    "Aplicação de ureia": -6.075666666666667,
+    "Emissões indiretas de N2O do manejo de dejetos": 40.19049420571426,
+    "Agropecuário": 52.37647641929425,
+    "Incineração e Queima à Céu Aberto": 249.39658275148076,
+    "Manejo de dejetos": 954.0844831085712,
+    "Compostagem": 5276.901274924294,
+    "Reflorestamento": 10934.792508725068,
+    "Mudança de uso do solo": 19102.581379069947,
+    "Uso de óxido nitroso": 43014.921016666674,
+    "Perdas comerciais de energia elétrica + outros não categorizados": 68597.9220822191,
+    "Indústrias de manufatura e construção": 160524.01972867642,
+    "Indústrias de energia": 193030.0502412018,
+    "Aterramento": 383970.3933279044
+  },
+  "soma_deltas_top3_queda": -2795734.207273678,
+  "delta_total": -2429549.900352914
+}
