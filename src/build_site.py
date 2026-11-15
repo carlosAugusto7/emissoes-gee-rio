@@ -208,7 +208,7 @@ def montar_html() -> str:
 <meta name="author" content="{autores}">
 <meta name="keywords" content="emissões de gases de efeito estufa, inventário GPC, Rio de Janeiro, análise exploratória de dados, FAIR">
 <link rel="license" href="https://creativecommons.org/licenses/by/4.0/">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.2/plotly.min.js" defer></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js'" defer></script>
 <style>{CSS}</style>
 </head>
 <body>
