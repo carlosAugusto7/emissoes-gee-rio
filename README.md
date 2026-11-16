@@ -5,9 +5,10 @@
 Projeto final da disciplina Linguagem de Programação<br>
 Bacharelado em Sistemas de Informação 6º período · Centro Universitário La Salle · Semestre 2026/2<br>
 Professor: Alexandre Neves Louzada<br>
-Autores: Carlos Augusto Ferreira Souza; Wilson da Silva Prata Júnior
+Autores: Carlos Augusto Ferreira Souza ([@carlosAugusto7](https://github.com/carlosAugusto7)); Wilson da Silva Prata Júnior ([@WillPrata](https://github.com/WillPrata))
 
 📄 **Artigo (GitHub Pages):** https://carlosAugusto7.github.io/emissoes-gee-rio/
+
 
 ## Resumo executivo
 Pipeline determinístico em Python que converte a Tabela 3696 do Data.Rio/IPP (emissões de gases de efeito estufa da cidade do Rio de Janeiro, metodologia GPC, 2012–2024) em um conjunto de dados longo, validado e aberto, e o explora por setor, escopo e gás.
