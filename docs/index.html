@@ -14,11 +14,11 @@
 <style>
 :root{--bg:#fff;--fg:#1d2327;--mut:#5b6670;--line:#dfe4e8;--acc:#0b5cab;--acc2:#3b8de0;--card:#f6f8fa;--code:#0f1720;--codefg:#e6edf3;--shadow:0 6px 24px rgba(15,23,32,.07);--bar:rgba(255,255,255,.82)}
 [data-theme="dark"]{--bg:#12161a;--fg:#e6e9ec;--mut:#9aa6b0;--line:#2a3138;--acc:#6db3ff;--acc2:#2f7fd6;--card:#1a2025;--shadow:0 6px 24px rgba(0,0,0,.35);--bar:rgba(18,22,26,.82)}
-*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
-body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.68 Georgia,'Times New Roman',serif;transition:background .25s,color .25s}
-.wrap{max-width:880px;margin:0 auto;padding:0 20px 80px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px;max-width:100%;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.68 Georgia,'Times New Roman',serif;transition:background .25s,color .25s;max-width:100%;overflow-x:hidden}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px 80px;width:100%}
 /* barra superior */
-.top{position:sticky;top:0;z-index:50;background:var(--bar);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top{position:sticky;top:0;z-index:50;background:var(--bar);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);width:100%}
 .top-in{max-width:1100px;margin:0 auto;padding:0 16px;height:52px;display:flex;align-items:center;gap:14px;font:600 13.5px system-ui,sans-serif}
 .top .brand{color:var(--fg);text-decoration:none;white-space:nowrap;font-weight:700}
 .top nav{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
@@ -32,6 +32,8 @@ header{padding:54px 0 28px}
 header .kicker{font:700 12.5px/1 system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
 h1{font-size:clamp(1.6rem,4.4vw,2.3rem);line-height:1.22;margin:14px 0 18px;letter-spacing:-.01em}
 .autores{font:16px/1.5 system-ui,sans-serif}.afil{font:14px/1.55 system-ui,sans-serif;color:var(--mut);margin-top:6px}
+.subtle-link{color:inherit;text-decoration:none;transition:color .15s}
+.subtle-link:hover{color:var(--acc);text-decoration:underline;text-underline-offset:3px}
 .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;font:600 12.5px/1 system-ui,sans-serif}
 .badge{display:inline-block;padding:7px 11px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--fg);text-decoration:none;transition:.15s}
 a.badge:hover{border-color:var(--acc);transform:translateY(-1px)}
@@ -46,7 +48,7 @@ a.badge:hover{border-color:var(--acc);transform:translateY(-1px)}
 /* texto */
 h2{font-size:1.45rem;margin:52px 0 8px;padding-top:10px;letter-spacing:-.01em}
 h2::before{content:"";display:block;width:34px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--acc2),var(--acc));margin-bottom:12px}
-h3{font-size:1.14rem;margin:30px 0 4px}p{margin:.7em 0}a{color:var(--acc)}
+h3{font-size:1.14rem;margin:30px 0 4px}p{margin:.7em 0}a{color:var(--acc);overflow-wrap:anywhere;word-break:break-word}
 .abstract{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:10px;padding:4px 22px 16px;margin:26px 0}
 .abstract h2{margin-top:14px;font-size:1.1rem}.abstract h2::before{display:none}.kw{font:14px/1.5 system-ui,sans-serif;color:var(--mut)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.chips span{font:12.5px system-ui,sans-serif;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--mut)}
@@ -54,22 +56,22 @@ h3{font-size:1.14rem;margin:30px 0 4px}p{margin:.7em 0}a{color:var(--acc)}
 .take{margin:22px 0;padding:14px 18px;border-radius:10px;background:linear-gradient(135deg,rgba(59,141,224,.12),rgba(59,141,224,.03));border:1px solid var(--line)}
 .take b.t{display:block;font:700 11.5px system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:4px}
 /* figuras */
-figure{margin:28px 0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 14px 10px;box-shadow:var(--shadow)}
+figure{margin:28px 0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 14px 10px;box-shadow:var(--shadow);max-width:100%;overflow:hidden}
 figure img{max-width:100%;height:auto;border-radius:6px;background:#fff}
 figcaption{font:14px/1.5 system-ui,sans-serif;color:var(--mut);margin-top:6px}
 .plot{width:100%;min-height:360px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:700px){.pair{grid-template-columns:1fr}}
 .ctrl{font:14px system-ui,sans-serif;margin:2px 0 8px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--bg)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--bg);max-width:100%}
 .seg button{border:0;background:none;color:var(--mut);font:600 13px system-ui,sans-serif;padding:7px 13px;cursor:pointer;transition:.15s}
 .seg button+button{border-left:1px solid var(--line)}.seg button:hover{color:var(--fg)}
 .seg button.on{background:var(--acc);color:#fff}
 select{font:600 13px system-ui,sans-serif;padding:6px 8px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:7px}
 /* código e tabelas */
-.code{position:relative}.copy{position:absolute;top:8px;right:8px;border:1px solid #3a444e;background:#1b2530;color:#cdd6de;border-radius:6px;font:600 11.5px system-ui,sans-serif;padding:4px 9px;cursor:pointer;opacity:.0;transition:.15s}
+.code{position:relative;max-width:100%}.copy{position:absolute;top:8px;right:8px;border:1px solid #3a444e;background:#1b2530;color:#cdd6de;border-radius:6px;font:600 11.5px system-ui,sans-serif;padding:4px 9px;cursor:pointer;opacity:.0;transition:.15s}
 .code:hover .copy,.copy:focus{opacity:1}
-pre{background:var(--code);color:var(--codefg);padding:14px 16px;border-radius:10px;overflow-x:auto;font:13px/1.55 ui-monospace,Menlo,Consolas,monospace;margin:12px 0}
+pre{background:var(--code);color:var(--codefg);padding:14px 16px;border-radius:10px;overflow-x:auto;font:13px/1.55 ui-monospace,Menlo,Consolas,monospace;margin:12px 0;max-width:100%}
 code{font:.88em ui-monospace,Menlo,Consolas,monospace;background:var(--card);padding:1px 5px;border-radius:4px}pre code{background:none;padding:0}
-.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;font:14px/1.45 system-ui,sans-serif}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;max-width:100%}table{border-collapse:collapse;width:100%;font:14px/1.45 system-ui,sans-serif}
 th,td{border-bottom:1px solid var(--line);padding:9px 12px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:var(--card);cursor:pointer;user-select:none;white-space:nowrap}
 th:hover{color:var(--acc)}tbody tr:hover{background:var(--card)}tbody tr:last-child td{border-bottom:0}
 .neg{color:#0a9b72}.pos{color:#d55e00}
@@ -81,7 +83,7 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font:13
 #up.show{opacity:1;pointer-events:auto}
 .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}.reveal.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
-@media (max-width:560px){body{font-size:16px}h2{font-size:1.28rem}.wrap{padding:0 16px 70px}}
+@media (max-width:560px){body{font-size:16px}h2{font-size:1.28rem}.wrap{padding:0 16px 70px}.abstract{padding:4px 16px 14px}figure{padding:12px 10px 8px}.plot{min-height:300px}.seg button{padding:7px 9px;font-size:12px}}
 @media print{.top,#up,.copy,.seg,.ctrl{display:none}.reveal{opacity:1;transform:none}figure{box-shadow:none}}
 </style>
 <noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
@@ -100,8 +102,8 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font:13
 <header>
   <div class="kicker">Projeto Final · Linguagem de Programação</div>
   <h1>Emissões de gases de efeito estufa da cidade do Rio de Janeiro (2012–2024): composição setorial, volatilidade por escopo e fatores da redução líquida</h1>
-  <div class="autores"><b>Carlos Augusto Ferreira Souza, Wilson da Silva Prata Junior</b></div>
-  <div class="afil">Bacharelado em Sistemas de Informação — 6º período · Centro Universitário La Salle<br>
+  <div class="autores"><b><a class="subtle-link" href="https://github.com/carlosAugusto7" target="_blank" rel="noopener">Carlos Augusto Ferreira Souza</a>, <a class="subtle-link" href="https://github.com/WillPrata" target="_blank" rel="noopener">Wilson da Silva Prata Junior</a></b></div>
+  <div class="afil">Bacharelado em Sistemas de Informação — 6º período · <a class="subtle-link" href="https://www.unilasalle.edu.br/rj" target="_blank" rel="noopener">Centro Universitário La Salle</a><br>
   Prof. Alexandre Neves Louzada · Semestre 2026/2</div>
   <div class="badges">
     <a class="badge gh" href="https://github.com/carlosAugusto7/emissoes-gee-rio">⌥ Repositório no GitHub</a>
@@ -275,7 +277,7 @@ python -m src.build_site   # regenera docs/index.html</code></pre></div>
 </main>
 
 <footer>
-  Linguagem de Programação · Centro Universitário La Salle · 2026/2.<br>
+  Linguagem de Programação · <a class="subtle-link" href="https://www.unilasalle.edu.br/rj" target="_blank" rel="noopener">Centro Universitário La Salle</a> · 2026/2.<br>
   Texto e dados processados sob licença <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>; código sob licença MIT. Dados originais: IPP/Data.Rio, sujeitos aos termos da fonte.
 </footer>
 </div>
@@ -288,6 +290,7 @@ const root = document.documentElement;
 const Mt = v => v / 1e6;
 const pt = (v, d) => v.toLocaleString('pt-BR', {minimumFractionDigits: d, maximumFractionDigits: d});
 const S = {g1: 'abs', g2: 'abs', yA: 2012, yB: 2024};
+const isMob = () => innerWidth < 600;
 
 /* ---------- tema ---------- */
 function setTheme(t, save) {
@@ -310,13 +313,13 @@ function col() {
   return {fg: cs.getPropertyValue('--fg').trim(), grid: cs.getPropertyValue('--line').trim(), mut: cs.getPropertyValue('--mut').trim(), acc: cs.getPropertyValue('--acc').trim()};
 }
 function base(extra) {
-  const c = col();
+  const c = col(), mob = isMob();
   return Object.assign({
     paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
-    font: {family: 'system-ui,sans-serif', color: c.fg, size: 13},
-    margin: {l: 58, r: 14, t: 16, b: 46},
+    font: {family: 'system-ui,sans-serif', color: c.fg, size: mob ? 11.5 : 13},
+    margin: {l: mob ? 44 : 58, r: 12, t: 16, b: 46},
     xaxis: {gridcolor: c.grid, zeroline: false}, yaxis: {gridcolor: c.grid, zeroline: false},
-    legend: {orientation: 'h', y: -0.2}, hoverlabel: {font: {family: 'system-ui,sans-serif'}}
+    legend: {orientation: 'h', y: -0.22}, hoverlabel: {font: {family: 'system-ui,sans-serif'}}
   }, extra || {});
 }
 const cfg = {responsive: true, displaylogo: false, modeBarButtonsToRemove: ['lasso2d', 'select2d']};
@@ -326,12 +329,12 @@ function g1() {
   const pct = S.g1 === 'pct';
   const tr = D.setores.map(s => ({type: 'bar', name: s.nome, x: D.anos, y: s.valores.map(Mt), marker: {color: s.cor},
     hovertemplate: '%{x}: %{y:.2f} Mt CO₂e<extra>' + s.nome + '</extra>'}));
-  const c = col();
+  const c = col(), mob = isMob();
   plot('g1', tr, base({barmode: 'stack', barnorm: pct ? 'percent' : '',
-    xaxis: {dtick: 1, gridcolor: c.grid}, yaxis: {title: pct ? '% do total' : 'Milhões de t CO₂e', gridcolor: c.grid}}));
+    xaxis: {dtick: mob ? 2 : 1, gridcolor: c.grid}, yaxis: {title: pct ? '% do total' : 'Milhões de t CO₂e', gridcolor: c.grid}}));
 }
 function g2() {
-  const mode = S.g2, c = col();
+  const mode = S.g2, c = col(), mob = isMob();
   const tot = D.anos.map((_, i) => D.escopos.reduce((a, s) => a + s.valores[i], 0));
   const tr = D.escopos.map(s => {
     let y = s.valores.map(Mt), t = 'Mt';
@@ -341,16 +344,19 @@ function g2() {
       hovertemplate: '%{x}: %{y:.1f} ' + t + '<extra>' + s.nome + '</extra>'};
   });
   const yt = {abs: 'Milhões de t CO₂e', share: '% do total', idx: 'Índice (2012 = 100)'}[mode];
-  plot('g2', tr, base({xaxis: {dtick: 1, gridcolor: c.grid}, yaxis: {title: yt, gridcolor: c.grid, rangemode: 'tozero'}}));
+  plot('g2', tr, base({xaxis: {dtick: mob ? 2 : 1, gridcolor: c.grid}, yaxis: {title: yt, gridcolor: c.grid, rangemode: 'tozero'}}));
 }
 function gShare() {
-  const c = col(), iA = D.anos.indexOf(S.yA), iB = D.anos.indexOf(S.yB);
+  const c = col(), mob = isMob(), iA = D.anos.indexOf(S.yA), iB = D.anos.indexOf(S.yB);
   const part = i => D.setores.map(s => s.valores[i] / D.setores.reduce((a, q) => a + q.valores[i], 0) * 100);
-  const nomes = D.setores.map(s => s.nome.replace('Processos Industriais e Uso de Produtos', 'Processos industriais').replace('Agropecuária, Floresta e Uso do Solo', 'Agro, floresta e solo'));
+  const nomes = D.setores.map(s => s.nome
+    .replace('Processos Industriais e Uso de Produtos', 'Processos industriais')
+    .replace('Agropecuária, Floresta e Uso do Solo', 'Agro, floresta e solo')
+    .replace('Energia Estacionária', mob ? 'Energia estac.' : 'Energia Estacionária'));
   const mk = (i, y, color) => ({type: 'bar', orientation: 'h', name: String(y), y: nomes, x: part(i), marker: {color},
     text: part(i).map(v => pt(v, 1) + '%'), textposition: 'outside', cliponaxis: false, hovertemplate: '%{y}: %{x:.1f}% (' + y + ')<extra></extra>'});
   plot('gs', [mk(iA, S.yA, '#8db8e6'), mk(iB, S.yB, '#0b5cab')],
-    base({barmode: 'group', margin: {l: 150, r: 40, t: 10, b: 46}, xaxis: {title: 'Participação no total (%)', range: [0, 58], gridcolor: c.grid},
+    base({barmode: 'group', margin: {l: mob ? 105 : 150, r: 36, t: 10, b: 46}, xaxis: {title: 'Participação no total (%)', range: [0, 62], gridcolor: c.grid},
       yaxis: {autorange: 'reversed', automargin: true}, height: 380}));
 }
 function g3() {
@@ -379,18 +385,21 @@ function g4() {
   plot('g5', tr2, base({xaxis: {dtick: 2, gridcolor: c.grid}, yaxis: {title: 'Participação no total (%)', gridcolor: c.grid, rangemode: 'tozero'}}));
 }
 function g6() {
-  const c = col(), a = S.yA, b = S.yB, ia = D.anos.indexOf(a), ib = D.anos.indexOf(b);
+  const c = col(), mob = isMob(), a = S.yA, b = S.yB, ia = D.anos.indexOf(a), ib = D.anos.indexOf(b);
   const rows = D.subsetores.map(s => ({n: s.nome, d: Mt(s.valores[ib] - s.valores[ia])})).filter(r => !isNaN(r.d)).sort((p, q) => p.d - q.d);
   let sel = rows.slice(0, 8).concat(rows.slice(-8));
   sel = sel.filter((r, i, arr) => arr.findIndex(x => x.n === r.n) === i);
-  const lab = n => n.length > 44 ? n.slice(0, 42) + '…' : n;
+  const lim = mob ? 22 : 44;
+  const lab = n => n.length > lim ? n.slice(0, lim - 2) + '…' : n;
   plot('g6', [{type: 'bar', orientation: 'h', x: sel.map(r => r.d), y: sel.map(r => lab(r.n)), customdata: sel.map(r => r.n),
     marker: {color: sel.map(r => r.d < 0 ? '#009E73' : '#D55E00')}, text: sel.map(r => (r.d > 0 ? '+' : '') + pt(r.d, 2)), textposition: 'outside', cliponaxis: false,
     hovertemplate: '%{customdata}<br>%{x:+.3f} Mt CO₂e<extra></extra>'}],
-    base({margin: {l: 250, r: 50, t: 10, b: 50}, xaxis: {title: 'Variação ' + a + '→' + b + ' (milhões de t CO₂e)', gridcolor: c.grid, zeroline: true, zerolinecolor: c.fg},
-      yaxis: {automargin: true, tickfont: {size: 11.5}}, height: 540}));
+    base({margin: {l: mob ? 128 : 250, r: 42, t: 10, b: 50}, xaxis: {title: 'Variação ' + a + '→' + b + ' (Mt CO₂e)', gridcolor: c.grid, zeroline: true, zerolinecolor: c.fg},
+      yaxis: {automargin: true, tickfont: {size: mob ? 10.5 : 11.5}}, height: 540}));
 }
 function renderAll() { g1(); g2(); gShare(); g3(); g4(); g6(); }
+let rTimer;
+addEventListener('resize', () => { clearTimeout(rTimer); rTimer = setTimeout(() => { if (window.Plotly) renderAll(); }, 180); });
 
 /* ---------- controles ---------- */
 $$('.seg').forEach(seg => seg.addEventListener('click', e => {
