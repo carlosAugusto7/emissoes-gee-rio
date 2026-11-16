@@ -12,6 +12,7 @@ Uso:
 
 Cada decisão de limpeza é registrada em LOG e gravada em
 data/processed/etl_log.txt (rastreabilidade: nada em data/raw é alterado).
+Se qualquer validação falhar, o script lança erro (código de saída 1) e NÃO grava dados processados.
 """
 from __future__ import annotations
 
@@ -116,25 +117,60 @@ def parse_sheet(raw: pd.DataFrame, dimensao: str) -> pd.DataFrame:
     return pd.DataFrame(registros)
 
 
-def validar(df: pd.DataFrame) -> list[str]:
-    """Checagens de consistência. Devolve mensagens para o log."""
-    msgs = []
-    tot = (
-        df[(df.nivel == "total") & (df.componente == "Total")]
-        .set_index(["dimensao", "ano"])["valor_tco2e"]
-    )
+TOL = 1e-3  # tolerância (t CO2e) para as checagens de soma; os dados são publicados com arredondamento muito menor
+ANOS_ESPERADOS = list(range(2012, 2025))
+
+
+def validar(df: pd.DataFrame) -> tuple[list[str], list[str]]:
+    """Checagens de consistência. Devolve (mensagens para o log, erros que devem interromper o ETL)."""
+    msgs: list[str] = []
+    erros: list[str] = []
+
+    # 1) estrutura esperada
+    anos = sorted(int(a) for a in df["ano"].unique())
+    if anos != ANOS_ESPERADOS:
+        erros.append(f"Anos encontrados {anos[0]}-{anos[-1]} ({len(anos)}); esperado 2012-2024 (13 anos)")
+    setores = set(df.loc[df.nivel == "setor", "categoria"])
+    if setores != set(SETORES):
+        erros.append(f"Setores encontrados diferem do esperado: faltam {sorted(set(SETORES) - setores)}, sobram {sorted(setores - set(SETORES))}")
+    if df["nivel"].eq("total").sum() == 0:
+        erros.append("Linha TOTAL não encontrada")
+    msgs.append(f"Estrutura: {len(anos)} anos, {len(setores)} setores")
+
+    # 2) TOTAL e setores não podem ter valor ausente
+    chave = df[(df.componente == "Total") & df.nivel.isin(["setor", "total"])]
+    n_nan = int(chave["valor_tco2e"].isna().sum())
+    if n_nan:
+        erros.append(f"{n_nan} valores ausentes em setores/TOTAL (componente Total)")
+
+    # 3) os 5 setores somam o TOTAL publicado
+    tot = df[(df.nivel == "total") & (df.componente == "Total")].set_index(["dimensao", "ano"])["valor_tco2e"]
     soma = (
         df[(df.nivel == "setor") & (df.componente == "Total")]
         .groupby(["dimensao", "ano"], observed=True)["valor_tco2e"]
         .sum()
     )
-    msgs.append(f"Soma dos 5 setores vs TOTAL: diferença máxima = {(tot - soma).abs().max():,.4f} tCO2e")
+    dif = (tot - soma).abs().max()
+    msgs.append(f"Soma dos 5 setores vs TOTAL: diferença máxima = {dif:,.4f} tCO2e")
+    if not dif <= TOL:
+        erros.append(f"Soma dos setores difere do TOTAL em até {dif:,.4f} tCO2e (tolerância {TOL})")
+
+    # 4) as partes (escopos ou gases) somam o Total de cada setor/ano
     for dim, partes in [("escopo", ["Escopo 1", "Escopo 2", "Escopo 3"]), ("gas", ["CO2", "CH4", "N2O"])]:
         d = df[(df.dimensao == dim) & (df.nivel == "setor")]
         p = d.pivot_table(index=["ano", "categoria"], columns="componente", values="valor_tco2e", observed=True)
         err = (p[partes].sum(axis=1) - p["Total"]).abs().max()
         msgs.append(f"{dim}: máx |soma das partes - Total| por setor/ano = {err:,.4f} tCO2e")
-    return msgs
+        if not err <= TOL:
+            erros.append(f"{dim}: soma das partes difere do Total em até {err:,.4f} tCO2e (tolerância {TOL})")
+
+    # 5) as duas abas devem trazer o mesmo TOTAL
+    t = df[(df.nivel == "total") & (df.componente == "Total")].pivot_table(index="ano", columns="dimensao", values="valor_tco2e")
+    dif_abas = (t["escopo"] - t["gas"]).abs().max()
+    msgs.append(f"TOTAL aba Escopos vs aba GEE: diferença máxima = {dif_abas:,.4f} tCO2e")
+    if not dif_abas <= TOL:
+        erros.append(f"TOTAL difere entre as abas em até {dif_abas:,.4f} tCO2e")
+    return msgs, erros
 
 
 def run(raw_path: Path = RAW_DEFAULT, out_dir: Path = OUT_DIR) -> pd.DataFrame:
@@ -150,7 +186,14 @@ def run(raw_path: Path = RAW_DEFAULT, out_dir: Path = OUT_DIR) -> pd.DataFrame:
     LOG.append(f"Valores ausentes ('...' e 'NE') mantidos como NaN, sem imputação: {int(df['valor_tco2e'].isna().sum())}")
     LOG.append(f"Células '-' ou '(0)' convertidas para 0.0: {int((df['valor_tco2e'] == 0).sum())}")
     LOG.append("Grafias corrigidas: 'Ferrroviário'->'Ferroviário'; 'Ceu'->'Céu'")
-    LOG.extend(validar(df))
+    msgs, erros = validar(df)
+    LOG.extend(msgs)
+    if erros:
+        # grava o log para diagnóstico, mas NÃO grava nenhum dado processado
+        LOG.extend(f"ERRO DE VALIDAÇÃO: {e}" for e in erros)
+        (out_dir / "etl_log.txt").write_text("\n".join(LOG) + "\n", encoding="utf-8")
+        raise ValueError("Validação falhou; nenhum arquivo processado foi gravado:\n  - " + "\n  - ".join(erros))
+    LOG.append("Validação: todas as checagens passaram")
 
     df["ano"] = df["ano"].astype("int16")
     df.to_csv(out_dir / "emissoes_long.csv.gz", index=False, compression="gzip")
@@ -170,5 +213,8 @@ if __name__ == "__main__":
     ap.add_argument("--raw", type=Path, default=RAW_DEFAULT)
     ap.add_argument("--out", type=Path, default=OUT_DIR)
     args = ap.parse_args()
-    run(args.raw, args.out)
+    try:
+        run(args.raw, args.out)
+    except ValueError as e:
+        raise SystemExit(f"ERRO: {e}")  # código de saída 1: interrompe scripts e pipelines
     print("\n".join(LOG))

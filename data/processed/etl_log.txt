@@ -3,6 +3,9 @@
 Valores ausentes ('...' e 'NE') mantidos como NaN, sem imputação: 562
 Células '-' ou '(0)' convertidas para 0.0: 618
 Grafias corrigidas: 'Ferrroviário'->'Ferroviário'; 'Ceu'->'Céu'
+Estrutura: 13 anos, 5 setores
 Soma dos 5 setores vs TOTAL: diferença máxima = 0.0000 tCO2e
 escopo: máx |soma das partes - Total| por setor/ano = 0.0000 tCO2e
 gas: máx |soma das partes - Total| por setor/ano = 0.0000 tCO2e
+TOTAL aba Escopos vs aba GEE: diferença máxima = 0.0000 tCO2e
+Validação: todas as checagens passaram

@@ -20,10 +20,5 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
----------------------------------------------------------------------------
-Escopo: a licença MIT acima cobre o CÓDIGO (src/ e notebooks/).
-O TEXTO do artigo (docs/) e os DADOS PROCESSADOS (data/processed/) são
-distribuídos sob Creative Commons Atribuição 4.0 Internacional (CC BY 4.0):
-https://creativecommons.org/licenses/by/4.0/
-Os dados brutos (data/raw/) pertencem ao IPP/Data.Rio; consulte a fonte original:
-https://www.data.rio/documents/d242a8866bb64769a00958e925f43350/about
+Escopo: esta licença cobre o CÓDIGO do repositório (src/ e notebooks/).
+Texto do artigo, dados processados e dados brutos: ver LICENSE-DATA.md.

@@ -59,7 +59,8 @@ SNIPPETS = {
     "valid": '''tot = df[(df.nivel == "total") & (df.componente == "Total")].set_index(["dimensao", "ano"])["valor_tco2e"]
 soma = (df[(df.nivel == "setor") & (df.componente == "Total")]
         .groupby(["dimensao", "ano"], observed=True)["valor_tco2e"].sum())
-assert (tot - soma).abs().max() < 1e-3   # os 5 setores reproduzem exatamente o TOTAL publicado''',
+if not (tot - soma).abs().max() <= TOL:   # os 5 setores devem reproduzir o TOTAL publicado
+    raise ValueError("Validação falhou; nenhum arquivo processado foi gravado")''',
 }
 
 CSS = """
@@ -428,7 +429,7 @@ def montar_html() -> str:
   {html.escape(c['professor'])} · Semestre {html.escape(c['semestre'])}</div>
   <div class="badges">
     <a class="badge gh" href="{c['repo_url']}">⌥ Repositório no GitHub</a>
-    <span class="badge">Código: MIT</span><span class="badge">Dados e texto: CC BY 4.0</span>
+    <span class="badge">Código: MIT</span><span class="badge">Texto e dados processados: CC BY 4.0</span>
     <span class="badge">FAIR</span><span class="badge">Python · pandas · Plotly</span>
     <a class="badge" href="{c['dados_url']}">Fonte: Data.Rio / IPP</a>
   </div>
@@ -464,7 +465,8 @@ def montar_html() -> str:
   <li><b>Normalização:</b> remoção de notas de rodapé nos rótulos e correção de grafias (“Ferrroviário”, “Ceu”).</li>
   <li><b>Valores negativos mantidos:</b> reflorestamento e arborização urbana removem carbono e entram com sinal negativo.</li>
   <li><b>Validação:</b> a soma dos cinco setores reproduz o TOTAL publicado (diferença máxima de 0,00 t) e as partes por escopo e por gás somam o total de cada linha. Os arquivos brutos nunca são alterados e o log de decisões fica em <code>data/processed/etl_log.txt</code>.</li>
-  <li><b>Métricas derivadas:</b> participação percentual, variação percentual, taxa de crescimento anual composta (CAGR) e coeficiente de variação (CV = desvio-padrão/média).</li>
+  <li><b>Métricas derivadas:</b> participação percentual (valor do setor / total do ano), variação percentual entre dois anos, taxa de crescimento anual composta (CAGR, com 12 intervalos entre 2012 e 2024) e coeficiente de variação.</li>
+  <li><b>Coeficiente de variação (CV):</b> razão entre o desvio-padrão amostral (denominador n − 1) e a média, em percentual, calculada sobre os 13 valores anuais (2012–2024) em t CO₂e de cada série. Por ser adimensional, permite comparar séries de escalas diferentes. Como usa a série inteira, o CV <b>inclui a tendência</b> e não apenas a oscilação ano a ano; além disso, fica instável quando a média é pequena (caso do setor agropecuário, florestal e de uso do solo). É, portanto, uma medida descritiva.</li>
 </ul>
 <p>Trechos centrais do pipeline (<code>src/etl.py</code>):</p>
 <div class="code reveal"><pre><code>{code['parse']}</code></pre></div>
@@ -488,7 +490,7 @@ def montar_html() -> str:
 <tbody>
 {tabela_resumo(m)}
 </tbody></table></div>
-<p class="note">Tabela 1. Participação no total, variação e coeficiente de variação por setor (clique no cabeçalho para ordenar).</p>
+<p class="note">Tabela 1. Participação no total, variação e coeficiente de variação por setor (clique no cabeçalho para ordenar). CV = desvio-padrão amostral / média dos 13 valores anuais de 2012 a 2024 (ver seção 2.2).</p>
 <figure class="reveal">
   <div class="ctrl"><label>Comparar <select id="sa"></select></label><label>com <select id="sb"></select></label></div>
   <div id="gs" class="plot" role="img" aria-label="Barras horizontais com a participação de cada setor em dois anos escolhidos"></div>
@@ -542,7 +544,7 @@ def montar_html() -> str:
   <li><b>Findable:</b> repositório com <code>README.md</code>, palavras-chave, autoria, disciplina e semestre; dados brutos referenciados pelo <a href="{c['dados_url']}">link da fonte</a>.</li>
   <li><b>Accessible:</b> repositório público no GitHub; scripts rodam sem credenciais; artigo servido pelo GitHub Pages, com layout responsivo.</li>
   <li><b>Interoperable:</b> dados processados em <code>.csv.gz</code> (formato aberto) e <code>data/data_dictionary.md</code> descrevendo cada variável.</li>
-  <li><b>Reusable:</b> licença MIT (código) e CC BY 4.0 (dados e texto); <code>requirements.txt</code> com versões fixas.</li>
+  <li><b>Reusable:</b> licença MIT para o código (<code>LICENSE</code>); CC BY 4.0 para o texto e para os dados processados (<code>LICENSE-DATA.md</code>), sem alterar os termos de uso do IPP/Data.Rio sobre os dados brutos; <code>requirements.txt</code> com versões fixas.</li>
 </ul>
 <p>Para reproduzir todo o pipeline:</p>
 <div class="code reveal"><pre><code>git clone {c['repo_url']}.git
@@ -570,7 +572,7 @@ python -m src.build_site   # regenera docs/index.html</code></pre></div>
 
 <footer>
   {html.escape(c['disciplina'])} · {html.escape(c['instituicao'])} · {html.escape(c['semestre'])}.<br>
-  Texto e dados processados sob licença <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>; código sob licença MIT. Dados originais: Data.Rio/IPP.
+  Texto e dados processados sob licença <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>; código sob licença MIT. Dados originais: IPP/Data.Rio, sujeitos aos termos da fonte.
 </footer>
 </div>
 <button id="up" aria-label="Voltar ao topo">↑</button>

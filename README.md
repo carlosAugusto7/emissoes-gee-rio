@@ -3,9 +3,10 @@
 ![Python](https://img.shields.io/badge/python-3.12-blue) ![Licença código](https://img.shields.io/badge/código-MIT-green) ![Licença dados](https://img.shields.io/badge/dados%20e%20texto-CC%20BY%204.0-lightgrey) ![FAIR](https://img.shields.io/badge/FAIR-compliant-success)
 
 Projeto final da disciplina Linguagem de Programação 
-Bacharelado em Sistemas de Informação — 6º período · Centro Universitário La Salle · Semestre 2026/2
+Bacharelado em Sistemas de Informação
+6º período · Centro Universitário La Salle · Semestre 2026/2
 Professor: Alexandre Neves Louzada
-Autores: Carlos Augusto Ferreira Souza; ; Wilson da Silva Prata Junior
+Autores: Carlos Augusto Ferreira Souza; Wilson da Silva Prata Junior
 
 📄 **Artigo (GitHub Pages):** https://carlosAugusto7.github.io/emissoes-gee-rio/
 
@@ -39,17 +40,34 @@ Instituto Municipal de Urbanismo Pereira Passos (IPP) / Data.Rio — Tabela 3696
 ```
 
 ## Como reproduzir
+1. **Clone o repositório e entre na pasta:**
 ```bash
-git clone https://github.com/carlosAugusto7/emissoes-gee-rio.git
+git clone [https://github.com/carlosAugusto7/emissoes-gee-rio.git](https://github.com/carlosAugusto7/emissoes-gee-rio.git)
 cd emissoes-gee-rio
-python -m venv .venv && source .venv/bin/activate    # Windows: .venv\Scripts\activate
+```
+
+2. **Crie e ative o ambiente virtual (`.venv`):**
+
+* **Windows (PowerShell):**
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+* **Linux / macOS:**
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+3. **Instale as dependências e execute o pipeline:**
+```bash
 pip install -r requirements.txt
 python -m src.etl            # data/raw -> data/processed
 python -m src.analysis       # figuras e métricas -> docs/assets
 python -m src.build_site     # gera docs/index.html
-jupyter lab                  # (opcional) abrir o notebook
+jupyter lab
 ```
-Para o Jupyter: `pip install jupyterlab` (não incluído no `requirements.txt`, pois o pipeline não depende dele).
 
 ## Publicação no GitHub Pages
 Settings → Pages → *Deploy from a branch* → branch `main`, pasta `/docs`.
