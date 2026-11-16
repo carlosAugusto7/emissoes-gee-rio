@@ -5,7 +5,7 @@
 Projeto final da disciplina Linguagem de Programação 
 Bacharelado em Sistemas de Informação — 6º período · Centro Universitário La Salle · Semestre 2026/2
 Professor: Alexandre Neves Louzada
-Autores: Carlos Augusto Ferreira Souza; ; Wilson da Silva Prata Junior
+Autores: Carlos Augusto Ferreira Souza; Wilson da Silva Prata Junior
 
 📄 **Artigo (GitHub Pages):** https://carlosAugusto7.github.io/emissoes-gee-rio/
 
