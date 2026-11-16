@@ -2,11 +2,10 @@
 
 ![Python](https://img.shields.io/badge/python-3.12-blue) ![Licença código](https://img.shields.io/badge/código-MIT-green) ![Licença dados](https://img.shields.io/badge/dados%20e%20texto-CC%20BY%204.0-lightgrey) ![FAIR](https://img.shields.io/badge/FAIR-compliant-success)
 
-Projeto final da disciplina Linguagem de Programação 
-Bacharelado em Sistemas de Informação
-6º período · Centro Universitário La Salle · Semestre 2026/2
-Professor: Alexandre Neves Louzada
-Autores: Carlos Augusto Ferreira Souza; Wilson da Silva Prata Junior
+Projeto final da disciplina Linguagem de Programação<br>
+Bacharelado em Sistemas de Informação 6º período · Centro Universitário La Salle · Semestre 2026/2<br>
+Professor: Alexandre Neves Louzada<br>
+Autores: Carlos Augusto Ferreira Souza; Wilson da Silva Prata Júnior
 
 📄 **Artigo (GitHub Pages):** https://carlosAugusto7.github.io/emissoes-gee-rio/
 
